@@ -237,6 +237,36 @@
       padding: 0 8px;
       line-height: 1.5;
     }
+
+    /* STICKY CTA BAR */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: linear-gradient(to top, #060d17 60%, transparent);
+      padding: 12px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .sticky-cta .cta-btn {
+      max-width: 480px;
+      width: 100%;
+      font-size: 18px;
+      padding: 18px 24px;
+    }
+    .sticky-cta .sticky-sub {
+      font-size: 11px;
+      color: #304050;
+      text-align: center;
+    }
+    .sticky-cta .sticky-sub strong { color: #29b6f6; }
+
+    /* push content above sticky bar */
+    body { padding-bottom: 100px; }
   </style>
 </head>
 <body>
@@ -305,6 +335,18 @@
       Ao adquirir você confirma ser maior de idade.
     </p>
 
+  </div>
+
+  <!-- STICKY CTA -->
+  <div class="sticky-cta">
+    <a
+      class="cta-btn"
+      href="https://pay.cakto.com.br/xbp8uv5_917950"
+      onclick="fbq('track','AddToCart'); fbq('track','CompleteRegistration');"
+    >
+      🔓 VER HISTÓRIA COMPLETA
+    </a>
+    <div class="sticky-sub">🔒 Seguro · Acesso imediato · <strong>Hoje R$19,90</strong></div>
   </div>
 
   <script>
