@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Histórias Proibidas — A História da Flavinha 🔞</title>
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '25817864254464973');
+    fbq('track', 'PageView');
+    fbq('track', 'Lead');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=25817864254464973&ev=PageView&noscript=1"/></noscript>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0005;
+      color: #f0e0e8;
+      font-family: 'Georgia', serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(180,0,60,0.18) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    /* --- HERO --- */
+    .hero {
+      text-align: center;
+      padding: 48px 0 32px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(200, 0, 60, 0.15);
+      border: 1px solid rgba(200, 0, 60, 0.4);
+      color: #ff6688;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 7vw, 42px);
+      line-height: 1.15;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 40px rgba(200,0,60,0.4);
+      margin-bottom: 8px;
+    }
+
+    .hero h1 span {
+      color: #ff4466;
+    }
+
+    .hero .sub {
+      font-size: 15px;
+      color: #b08090;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    /* --- COVER MOCKUP --- */
+    .cover-wrap {
+      position: relative;
+      display: inline-block;
+      margin: 0 auto 32px;
+    }
+
+    .cover-box {
+      width: 220px;
+      height: 300px;
+      background: linear-gradient(160deg, #2a0010 0%, #6b0020 40%, #1a0008 100%);
+      border-radius: 8px;
+      border: 1px solid rgba(200,0,60,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 20px 60px rgba(180,0,40,0.35), 0 4px 20px rgba(0,0,0,0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 30%, rgba(255,80,100,0.12) 0%, transparent 70%);
+    }
+
+    .cover-emoji {
+      font-size: 64px;
+      filter: drop-shadow(0 0 20px rgba(255,50,80,0.6));
+    }
+
+    .cover-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffaabb;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 0 16px;
+    }
+
+    .cover-pages {
+      font-size: 10px;
+      color: rgba(255,150,170,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .censored-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(10,0,5,0.95), transparent);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 10px;
+    }
+
+    .censored-text {
+      font-size: 9px;
+      color: rgba(255,100,120,0.6);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* --- SYNOPSIS --- */
+    .synopsis {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(200,0,60,0.15);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    .synopsis p {
+      font-size: 14.5px;
+      line-height: 1.75;
+      color: #d0b0b8;
+    }
+
+    .synopsis p strong {
+      color: #ff8899;
+    }
+
+    /* --- PREVIEW SECTION --- */
+    .preview-section {
+      margin-bottom: 28px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ff4466;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(200,0,60,0.2);
+    }
+
+    .preview-card {
+      background: rgba(100,0,30,0.12);
+      border: 1px solid rgba(200,0,60,0.2);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #c09098;
+      font-style: italic;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .preview-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(to top, rgba(10,0,5,1), transparent);
+    }
+
+    .preview-lock {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(255,100,120,0.5);
+    }
+
+    /* --- OFFER --- */
+    .offer-box {
+      background: linear-gradient(135deg, rgba(180,0,40,0.12) 0%, rgba(100,0,20,0.08) 100%);
+      border: 1px solid rgba(200,0,60,0.3);
+      border-radius: 14px;
+      padding: 24px 20px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .offer-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ff6688;
+      margin-bottom: 8px;
+    }
+
+    .offer-price {
+      font-size: 42px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .offer-price sup {
+      font-size: 20px;
+      vertical-align: top;
+      margin-top: 8px;
+      color: #ff8899;
+    }
+
+    .offer-desc {
+      font-size: 12px;
+      color: #906070;
+      margin-bottom: 20px;
+    }
+
+    /* --- CTA BUTTON --- */
+    .cta-btn {
+      display: block;
+      width: 100%;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #cc0033, #ff2255, #cc0033);
+      background-size: 200% 100%;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      text-align: center;
+      animation: btnPulse 2.5s ease-in-out infinite;
+      box-shadow: 0 8px 30px rgba(200,0,50,0.45);
+      transition: transform 0.1s;
+    }
+
+    .cta-btn:active { transform: scale(0.98); }
+
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 8px 30px rgba(200,0,50,0.45); }
+      50%       { box-shadow: 0 8px 45px rgba(200,0,50,0.7); }
+    }
+
+    .cta-sub {
+      font-size: 11px;
+      color: #704050;
+      margin-top: 10px;
+    }
+
+    /* --- GUARANTEE --- */
+    .guarantee {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 32px;
+    }
+
+    .guarantee-icon { font-size: 28px; flex-shrink: 0; }
+
+    .guarantee-text h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #e0c0c8;
+      margin-bottom: 2px;
+    }
+
+    .guarantee-text p {
+      font-size: 12px;
+      color: #806070;
+      line-height: 1.4;
+    }
+
+    /* --- FOOTER --- */
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #40202a;
+      line-height: 1.6;
+    }
+
+    .footer a { color: #60304a; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="badge">🔞 Conteúdo adulto — +18</div>
+      <h1>A História<br/>da <span>Flavinha</span> 🔥</h1>
+      <p class="sub">Uma noite que ela nunca deveria ter vivido.<br/>Mas viveu — e você vai querer saber tudo.</p>
+
+      <!-- Cover mockup -->
+      <div class="cover-wrap" style="display:flex;justify-content:center;">
+        <div class="cover-box">
+          <div class="cover-emoji">🔞</div>
+          <div class="cover-title">Histórias<br/>Proibidas</div>
+          <div class="cover-pages">HQ completa · +80 páginas</div>
+          <div class="censored-bar">
+            <span class="censored-text">⬛ censurado ⬛</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SYNOPSIS -->
+    <div class="synopsis">
+      <p>
+        <strong>Flavinha tem 18 anos</strong>, acabou de se formar e está prestes a começar uma nova vida na faculdade.
+        Mas antes de ir embora, ela tem <strong>uma última noite inesquecível</strong>…
+        <br/><br/>
+        O que começa como uma despedida inocente se transforma em algo que ela jamais esperava.
+        Uma noite de segredos, de desejo e de decisões que mudam tudo. 🔥
+      </p>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="preview-section">
+      <div class="section-label">Prévia gratuita</div>
+      <div class="preview-card">
+        "Ela sabia que não devia. Mas aquela noite tinha algo diferente — uma eletricidade no ar que
+        ela nunca tinha sentido antes. Quando ele se aproximou, Flavinha não recuou.
+        Pelo contrário, deu um passo à frente…"
+      </div>
+      <p class="preview-lock">🔒 Continua na história completa</p>
+    </div>
+
+    <!-- OFFER + CTA -->
+    <div class="offer-box">
+      <p class="offer-label">Acesso completo agora</p>
+      <div class="offer-price"><sup>R$</sup>19<sup>,90</sup></div>
+      <p class="offer-desc">Pagamento único · Acesso imediato via Telegram</p>
+      <a
+        class="cta-btn"
+        href="https://pay.cakto.com.br/xbp8uv5_917950"
+        onclick="fbq('track','InitiateCheckout')"
+      >
+        🔥 LER A HISTÓRIA COMPLETA
+      </a>
+      <p class="cta-sub">🔒 Pagamento 100% seguro</p>
+    </div>
+
+    <!-- GUARANTEE -->
+    <div class="guarantee">
+      <div class="guarantee-icon">🛡️</div>
+      <div class="guarantee-text">
+        <h4>Garantia de 7 dias</h4>
+        <p>Não gostou? Devolvemos seu dinheiro sem perguntas.</p>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>Conteúdo exclusivo para maiores de 18 anos.</p>
+      <p>© 2025 Histórias Proibidas. Todos os direitos reservados.</p>
+    </div>
+
+  </div>
+</body>
+</html>
