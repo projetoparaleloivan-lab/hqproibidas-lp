@@ -2,422 +2,391 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Histórias Proibidas — A História da Flavinha 🔞</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Histórias Proibidas — Prévia Gratuita 🔞</title>
 
   <!-- Meta Pixel -->
   <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '25817864254464973');
     fbq('track', 'PageView');
-    fbq('track', 'Lead');
+    fbq('track', 'ViewContent');
   </script>
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=25817864254464973&ev=PageView&noscript=1"/></noscript>
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
-      background: #0a0005;
-      color: #f0e0e8;
-      font-family: 'Georgia', serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* Background glow */
-    body::before {
-      content: '';
-      position: fixed;
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, rgba(180,0,60,0.18) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .wrapper {
-      position: relative;
-      z-index: 1;
-      max-width: 520px;
-      margin: 0 auto;
-      padding: 0 20px 60px;
-    }
-
-    /* --- HERO --- */
-    .hero {
-      text-align: center;
-      padding: 48px 0 32px;
-    }
-
-    .badge {
-      display: inline-block;
-      background: rgba(200, 0, 60, 0.15);
-      border: 1px solid rgba(200, 0, 60, 0.4);
-      color: #ff6688;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-    }
-
-    .hero h1 {
-      font-size: clamp(28px, 7vw, 42px);
-      line-height: 1.15;
-      font-weight: 900;
+      background: #080005;
       color: #fff;
-      text-shadow: 0 0 40px rgba(200,0,60,0.4);
-      margin-bottom: 8px;
-    }
-
-    .hero h1 span {
-      color: #ff4466;
-    }
-
-    .hero .sub {
-      font-size: 15px;
-      color: #b08090;
-      margin-bottom: 28px;
-      line-height: 1.5;
-    }
-
-    /* --- COVER MOCKUP --- */
-    .cover-wrap {
-      position: relative;
-      display: inline-block;
-      margin: 0 auto 32px;
-    }
-
-    .cover-box {
-      width: 220px;
-      height: 300px;
-      background: linear-gradient(160deg, #2a0010 0%, #6b0020 40%, #1a0008 100%);
-      border-radius: 8px;
-      border: 1px solid rgba(200,0,60,0.3);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 12px;
-      box-shadow: 0 20px 60px rgba(180,0,40,0.35), 0 4px 20px rgba(0,0,0,0.6);
-      position: relative;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
-    .cover-box::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 30%, rgba(255,80,100,0.12) 0%, transparent 70%);
+    /* ---- TOP BAR ---- */
+    .topbar {
+      width: 100%;
+      background: rgba(0,0,0,0.6);
+      border-bottom: 1px solid rgba(200,0,60,0.2);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
     }
 
-    .cover-emoji {
-      font-size: 64px;
-      filter: drop-shadow(0 0 20px rgba(255,50,80,0.6));
-    }
-
-    .cover-title {
+    .topbar-title {
       font-size: 13px;
       font-weight: 700;
-      color: #ffaabb;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      padding: 0 16px;
+      color: #ff4466;
+      letter-spacing: 0.5px;
     }
 
-    .cover-pages {
+    .topbar-badge {
       font-size: 10px;
-      color: rgba(255,150,170,0.5);
-      text-transform: uppercase;
+      background: rgba(200,0,60,0.15);
+      border: 1px solid rgba(200,0,60,0.35);
+      color: #ff6688;
+      padding: 3px 10px;
+      border-radius: 20px;
       letter-spacing: 1px;
     }
 
-    .censored-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 80px;
-      background: linear-gradient(to top, rgba(10,0,5,0.95), transparent);
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding-bottom: 10px;
-    }
-
-    .censored-text {
-      font-size: 9px;
-      color: rgba(255,100,120,0.6);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    /* --- SYNOPSIS --- */
-    .synopsis {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(200,0,60,0.15);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 28px;
-      text-align: left;
-    }
-
-    .synopsis p {
-      font-size: 14.5px;
-      line-height: 1.75;
-      color: #d0b0b8;
-    }
-
-    .synopsis p strong {
-      color: #ff8899;
-    }
-
-    /* --- PREVIEW SECTION --- */
-    .preview-section {
-      margin-bottom: 28px;
-    }
-
-    .section-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: #ff4466;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: rgba(200,0,60,0.2);
-    }
-
-    .preview-card {
-      background: rgba(100,0,30,0.12);
-      border: 1px solid rgba(200,0,60,0.2);
-      border-radius: 10px;
-      padding: 16px 18px;
-      font-size: 14px;
-      line-height: 1.7;
-      color: #c09098;
-      font-style: italic;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .preview-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 60px;
-      background: linear-gradient(to top, rgba(10,0,5,1), transparent);
-    }
-
-    .preview-lock {
-      text-align: center;
-      margin-top: 10px;
+    /* ---- PAGE COUNTER ---- */
+    .page-counter {
       font-size: 12px;
-      color: rgba(255,100,120,0.5);
+      color: #604050;
+      margin: 14px 0 8px;
+      letter-spacing: 1px;
     }
 
-    /* --- OFFER --- */
-    .offer-box {
-      background: linear-gradient(135deg, rgba(180,0,40,0.12) 0%, rgba(100,0,20,0.08) 100%);
-      border: 1px solid rgba(200,0,60,0.3);
-      border-radius: 14px;
-      padding: 24px 20px;
-      text-align: center;
+    .page-counter span {
+      color: #ff4466;
+      font-weight: 700;
+    }
+
+    /* ---- READER ---- */
+    .reader {
+      width: 100%;
+      max-width: 480px;
+      padding: 0 12px;
+      perspective: 1200px;
+    }
+
+    /* Page flip container */
+    .page-scene {
+      position: relative;
+      width: 100%;
+    }
+
+    .page-scene img {
+      width: 100%;
+      border-radius: 6px;
+      display: block;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(200,0,60,0.15);
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    /* Flip animation */
+    .page-flip-out {
+      animation: flipOut 0.35s ease-in forwards;
+      transform-origin: left center;
+    }
+    .page-flip-in {
+      animation: flipIn 0.35s ease-out forwards;
+      transform-origin: left center;
+    }
+    .page-flip-out-prev {
+      animation: flipOutPrev 0.35s ease-in forwards;
+      transform-origin: right center;
+    }
+    .page-flip-in-prev {
+      animation: flipInPrev 0.35s ease-out forwards;
+      transform-origin: right center;
+    }
+
+    @keyframes flipOut {
+      0%   { transform: rotateY(0deg); opacity: 1; }
+      100% { transform: rotateY(-90deg); opacity: 0; }
+    }
+    @keyframes flipIn {
+      0%   { transform: rotateY(90deg); opacity: 0; }
+      100% { transform: rotateY(0deg); opacity: 1; }
+    }
+    @keyframes flipOutPrev {
+      0%   { transform: rotateY(0deg); opacity: 1; }
+      100% { transform: rotateY(90deg); opacity: 0; }
+    }
+    @keyframes flipInPrev {
+      0%   { transform: rotateY(-90deg); opacity: 0; }
+      100% { transform: rotateY(0deg); opacity: 1; }
+    }
+
+    /* ---- NAV BUTTONS ---- */
+    .nav {
+      display: flex;
+      gap: 12px;
+      margin: 18px 0;
+      width: 100%;
+      max-width: 480px;
+      padding: 0 12px;
+    }
+
+    .nav-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-btn:active { transform: scale(0.97); }
+
+    .btn-prev {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #a08090;
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, #cc0033, #ff2255);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(200,0,50,0.4);
+    }
+
+    .btn-prev:disabled {
+      opacity: 0.2;
+      cursor: default;
+    }
+
+    /* ---- PROGRESS BAR ---- */
+    .progress-wrap {
+      width: 100%;
+      max-width: 480px;
+      padding: 0 12px;
       margin-bottom: 24px;
     }
 
-    .offer-label {
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: #ff6688;
-      margin-bottom: 8px;
+    .progress-bar {
+      height: 3px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
     }
 
-    .offer-price {
-      font-size: 42px;
-      font-weight: 900;
-      color: #fff;
-      line-height: 1;
-      margin-bottom: 4px;
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #cc0033, #ff2255);
+      border-radius: 3px;
+      transition: width 0.3s ease;
     }
 
-    .offer-price sup {
-      font-size: 20px;
-      vertical-align: top;
-      margin-top: 8px;
-      color: #ff8899;
+    /* ---- CTA (last page) ---- */
+    .cta-section {
+      display: none;
+      width: 100%;
+      max-width: 480px;
+      padding: 0 12px 40px;
+      text-align: center;
     }
 
-    .offer-desc {
-      font-size: 12px;
-      color: #906070;
+    .cta-section.visible { display: block; }
+
+    .cta-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       margin-bottom: 20px;
     }
 
-    /* --- CTA BUTTON --- */
+    .cta-divider::before, .cta-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(200,0,60,0.25);
+    }
+
+    .cta-divider span {
+      font-size: 11px;
+      color: #ff4466;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .cta-teaser {
+      font-size: 15px;
+      color: #c09098;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .cta-teaser strong { color: #ff8899; }
+
     .cta-btn {
       display: block;
       width: 100%;
       padding: 18px 24px;
-      background: linear-gradient(135deg, #cc0033, #ff2255, #cc0033);
-      background-size: 200% 100%;
+      background: linear-gradient(135deg, #cc0033, #ff2255);
       color: #fff;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 800;
       text-decoration: none;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      letter-spacing: 0.5px;
-      text-align: center;
-      animation: btnPulse 2.5s ease-in-out infinite;
-      box-shadow: 0 8px 30px rgba(200,0,50,0.45);
-      transition: transform 0.1s;
+      border-radius: 14px;
+      letter-spacing: 0.3px;
+      box-shadow: 0 8px 32px rgba(200,0,50,0.5);
+      animation: pulseCta 2s ease-in-out infinite;
+      margin-bottom: 10px;
     }
 
-    .cta-btn:active { transform: scale(0.98); }
-
-    @keyframes btnPulse {
-      0%, 100% { box-shadow: 0 8px 30px rgba(200,0,50,0.45); }
-      50%       { box-shadow: 0 8px 45px rgba(200,0,50,0.7); }
+    @keyframes pulseCta {
+      0%, 100% { box-shadow: 0 8px 32px rgba(200,0,50,0.5); }
+      50%       { box-shadow: 0 8px 50px rgba(200,0,50,0.75); }
     }
 
-    .cta-sub {
-      font-size: 11px;
-      color: #704050;
-      margin-top: 10px;
-    }
-
-    /* --- GUARANTEE --- */
-    .guarantee {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 32px;
-    }
-
-    .guarantee-icon { font-size: 28px; flex-shrink: 0; }
-
-    .guarantee-text h4 {
-      font-size: 13px;
-      font-weight: 700;
-      color: #e0c0c8;
-      margin-bottom: 2px;
-    }
-
-    .guarantee-text p {
+    .cta-price {
       font-size: 12px;
-      color: #806070;
-      line-height: 1.4;
+      color: #604050;
+      margin-top: 8px;
     }
 
-    /* --- FOOTER --- */
-    .footer {
-      text-align: center;
+    /* Swipe hint */
+    .swipe-hint {
       font-size: 11px;
-      color: #40202a;
-      line-height: 1.6;
+      color: #402030;
+      margin-top: 6px;
+      text-align: center;
     }
-
-    .footer a { color: #60304a; }
   </style>
 </head>
 <body>
-  <div class="wrapper">
 
-    <!-- HERO -->
-    <div class="hero">
-      <div class="badge">🔞 Conteúdo adulto — +18</div>
-      <h1>A História<br/>da <span>Flavinha</span> 🔥</h1>
-      <p class="sub">Uma noite que ela nunca deveria ter vivido.<br/>Mas viveu — e você vai querer saber tudo.</p>
-
-      <!-- Cover mockup -->
-      <div class="cover-wrap" style="display:flex;justify-content:center;">
-        <div class="cover-box">
-          <div class="cover-emoji">🔞</div>
-          <div class="cover-title">Histórias<br/>Proibidas</div>
-          <div class="cover-pages">HQ completa · +80 páginas</div>
-          <div class="censored-bar">
-            <span class="censored-text">⬛ censurado ⬛</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SYNOPSIS -->
-    <div class="synopsis">
-      <p>
-        <strong>Flavinha tem 18 anos</strong>, acabou de se formar e está prestes a começar uma nova vida na faculdade.
-        Mas antes de ir embora, ela tem <strong>uma última noite inesquecível</strong>…
-        <br/><br/>
-        O que começa como uma despedida inocente se transforma em algo que ela jamais esperava.
-        Uma noite de segredos, de desejo e de decisões que mudam tudo. 🔥
-      </p>
-    </div>
-
-    <!-- PREVIEW -->
-    <div class="preview-section">
-      <div class="section-label">Prévia gratuita</div>
-      <div class="preview-card">
-        "Ela sabia que não devia. Mas aquela noite tinha algo diferente — uma eletricidade no ar que
-        ela nunca tinha sentido antes. Quando ele se aproximou, Flavinha não recuou.
-        Pelo contrário, deu um passo à frente…"
-      </div>
-      <p class="preview-lock">🔒 Continua na história completa</p>
-    </div>
-
-    <!-- OFFER + CTA -->
-    <div class="offer-box">
-      <p class="offer-label">Acesso completo agora</p>
-      <div class="offer-price"><sup>R$</sup>19<sup>,90</sup></div>
-      <p class="offer-desc">Pagamento único · Acesso imediato via Telegram</p>
-      <a
-        class="cta-btn"
-        href="https://pay.cakto.com.br/xbp8uv5_917950"
-        onclick="fbq('track','InitiateCheckout')"
-      >
-        🔥 LER A HISTÓRIA COMPLETA
-      </a>
-      <p class="cta-sub">🔒 Pagamento 100% seguro</p>
-    </div>
-
-    <!-- GUARANTEE -->
-    <div class="guarantee">
-      <div class="guarantee-icon">🛡️</div>
-      <div class="guarantee-text">
-        <h4>Garantia de 7 dias</h4>
-        <p>Não gostou? Devolvemos seu dinheiro sem perguntas.</p>
-      </div>
-    </div>
-
-    <!-- FOOTER -->
-    <div class="footer">
-      <p>Conteúdo exclusivo para maiores de 18 anos.</p>
-      <p>© 2025 Histórias Proibidas. Todos os direitos reservados.</p>
-    </div>
-
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <span class="topbar-title">🔥 Histórias Proibidas</span>
+    <span class="topbar-badge">🔞 +18</span>
   </div>
+
+  <!-- PAGE COUNTER -->
+  <div class="page-counter">Página <span id="cur">1</span> de <span id="total">11</span></div>
+
+  <!-- READER -->
+  <div class="reader">
+    <div class="page-scene">
+      <img id="pageImg" src="pages/page01.jpg" alt="Página 1" />
+    </div>
+  </div>
+
+  <p class="swipe-hint">👆 Deslize ou use os botões para virar</p>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 9.09%"></div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changePage(-1)" disabled>← Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changePage(1)">Próxima →</button>
+  </div>
+
+  <!-- CTA (aparece na última página) -->
+  <div class="cta-section" id="ctaSection">
+    <div class="cta-divider"><span>e agora?</span></div>
+    <p class="cta-teaser">
+      Isso foi só o começo… 🔥<br/>
+      <strong>A história completa tem mais de 80 páginas</strong> e você não vai querer perder o que vem depois.
+    </p>
+    <a
+      class="cta-btn"
+      href="https://pay.cakto.com.br/xbp8uv5_917950"
+      onclick="fbq('track','InitiateCheckout')"
+    >
+      📲 HQ COMPLETA NO TELEGRAM — R$19,90
+    </a>
+    <p class="cta-price">🔒 Pagamento seguro · Acesso imediato</p>
+  </div>
+
+  <script>
+    const TOTAL = 11;
+    let current = 1;
+    let animating = false;
+
+    const img        = document.getElementById('pageImg');
+    const curEl      = document.getElementById('cur');
+    const btnPrev    = document.getElementById('btnPrev');
+    const btnNext    = document.getElementById('btnNext');
+    const progress   = document.getElementById('progressFill');
+    const ctaSection = document.getElementById('ctaSection');
+
+    function updateUI() {
+      curEl.textContent = current;
+      btnPrev.disabled = current === 1;
+      btnNext.textContent = current === TOTAL ? '✓ Fim da prévia' : 'Próxima →';
+      btnNext.disabled = current === TOTAL;
+      progress.style.width = ((current / TOTAL) * 100) + '%';
+      ctaSection.classList.toggle('visible', current === TOTAL);
+
+      if (current === TOTAL) {
+        fbq('track', 'AddToCart'); // reached end of preview
+      }
+    }
+
+    function changePage(dir) {
+      if (animating) return;
+      const next = current + dir;
+      if (next < 1 || next > TOTAL) return;
+
+      animating = true;
+      const outClass = dir > 0 ? 'page-flip-out'      : 'page-flip-out-prev';
+      const inClass  = dir > 0 ? 'page-flip-in'       : 'page-flip-in-prev';
+
+      img.classList.add(outClass);
+
+      setTimeout(() => {
+        current = next;
+        img.src = `pages/page${String(current).padStart(2,'0')}.jpg`;
+        img.classList.remove(outClass);
+        img.classList.add(inClass);
+        updateUI();
+
+        setTimeout(() => {
+          img.classList.remove(inClass);
+          animating = false;
+        }, 350);
+      }, 300);
+    }
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50) changePage(dx < 0 ? 1 : -1);
+    }, { passive: true });
+
+    // Keyboard support
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') changePage(1);
+      if (e.key === 'ArrowLeft')  changePage(-1);
+    });
+
+    updateUI();
+  </script>
 </body>
 </html>
