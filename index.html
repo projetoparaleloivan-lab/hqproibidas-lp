@@ -143,14 +143,16 @@
 
     .nav-btn {
       flex: 1;
-      padding: 14px;
+      padding: 16px;
       border-radius: 12px;
       border: none;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 700;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.1s;
       letter-spacing: 0.3px;
+      min-height: 52px;
+      touch-action: manipulation;
     }
 
     .nav-btn:active { transform: scale(0.97); }
@@ -327,6 +329,7 @@
     const TOTAL = 11;
     let current = 1;
     let animating = false;
+    const preloaded = new Set();
 
     const img        = document.getElementById('pageImg');
     const curEl      = document.getElementById('cur');
@@ -334,6 +337,17 @@
     const btnNext    = document.getElementById('btnNext');
     const progress   = document.getElementById('progressFill');
     const ctaSection = document.getElementById('ctaSection');
+
+    function pageUrl(n) {
+      return `pages/page${String(n).padStart(2,'0')}.jpg`;
+    }
+
+    function preload(n) {
+      if (n < 1 || n > TOTAL || preloaded.has(n)) return;
+      preloaded.add(n);
+      const i = new Image();
+      i.src = pageUrl(n);
+    }
 
     function updateUI() {
       curEl.textContent = current;
@@ -343,8 +357,12 @@
       progress.style.width = ((current / TOTAL) * 100) + '%';
       ctaSection.classList.toggle('visible', current === TOTAL);
 
+      // Preload next two pages
+      preload(current + 1);
+      preload(current + 2);
+
       if (current === TOTAL) {
-        fbq('track', 'AddToCart'); // reached end of preview
+        fbq('track', 'AddToCart');
       }
     }
 
@@ -361,7 +379,7 @@
 
       setTimeout(() => {
         current = next;
-        img.src = `pages/page${String(current).padStart(2,'0')}.jpg`;
+        img.src = pageUrl(current);
         img.classList.remove(outClass);
         img.classList.add(inClass);
         updateUI();
@@ -375,10 +393,17 @@
 
     // Touch/swipe support
     let touchStartX = 0;
-    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    let touchStartY = 0;
+    document.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
     document.addEventListener('touchend', e => {
       const dx = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(dx) > 50) changePage(dx < 0 ? 1 : -1);
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+        changePage(dx < 0 ? 1 : -1);
+      }
     }, { passive: true });
 
     // Keyboard support
@@ -387,6 +412,10 @@
       if (e.key === 'ArrowLeft')  changePage(-1);
     });
 
+    // Mark page 1 as preloaded (already in DOM), preload 2 and 3
+    preloaded.add(1);
+    preload(2);
+    preload(3);
     updateUI();
   </script>
 </body>
