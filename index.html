@@ -9,18 +9,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-<!-- ═══════════════════════════════════════════════════
-     META PIXEL + CAPI — configuração
-     Preencha as constantes abaixo antes de publicar.
-═══════════════════════════════════════════════════ -->
+<!-- META PIXEL + CAPI -->
 <script>
-  // ── CONFIGURAÇÃO ──────────────────────────────────
-  var PIXEL_ID    = "SEU_PIXEL_ID_AQUI";       // ex: "1234567890123456"
-  var CAPI_TOKEN  = "SEU_ACCESS_TOKEN_AQUI";   // token do System User ou token da conta
+  var PIXEL_ID    = "SEU_PIXEL_ID_AQUI";
+  var CAPI_TOKEN  = "SEU_ACCESS_TOKEN_AQUI";
   var API_VERSION = "v19.0";
-  // ─────────────────────────────────────────────────
 
-  // Captura fbc a partir do fbclid na URL (padrão Meta)
   function getFbc() {
     var match = location.search.match(/[?&]fbclid=([^&]+)/);
     if (match) {
@@ -28,27 +22,29 @@
       try { document.cookie = "_fbc=" + fbc + ";path=/;max-age=7776000"; } catch(e) {}
       return fbc;
     }
+
     var cookie = document.cookie.match(/(^|;\s*)_fbc=([^;]+)/);
     return cookie ? cookie[2] : null;
   }
 
-  // Lê fbp do cookie _fbp (setado automaticamente pelo pixel)
   function getFbp() {
     var cookie = document.cookie.match(/(^|;\s*)_fbp=([^;]+)/);
     return cookie ? cookie[2] : null;
   }
 
-  // Gera event_id único para deduplicação pixel ↔ CAPI
   function makeEventId() {
     return "ev_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
   }
 
-  // Dispara evento via CAPI (server-side simulado do cliente)
   function sendCapi(eventName, eventId, extraData) {
+
     if (!CAPI_TOKEN || CAPI_TOKEN === "SEU_ACCESS_TOKEN_AQUI") return;
+
     var fbc = getFbc();
     var fbp = getFbp();
+
     var userData = {};
+
     if (fbc) userData.fbc = fbc;
     if (fbp) userData.fbp = fbp;
 
@@ -60,46 +56,86 @@
         event_source_url: location.href,
         action_source: "website",
         user_data: userData,
-        custom_data: Object.assign({ currency: "BRL" }, extraData || {})
+        custom_data: Object.assign({
+          currency: "BRL"
+        }, extraData || {})
       }]
     };
 
     fetch(
       "https://graph.facebook.com/" + API_VERSION + "/" + PIXEL_ID + "/events?access_token=" + CAPI_TOKEN,
-      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }
-    ).catch(function() {});
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    ).catch(function(){});
   }
 
-  // Dispara evento no pixel + CAPI com mesmo event_id (deduplicação)
   function trackEvent(eventName, params, extraCapiData) {
+
     var eventId = makeEventId();
-    var pixelParams = Object.assign({ eventID: eventId }, params || {});
-    if (typeof fbq === "function") fbq("track", eventName, pixelParams);
+
+    var pixelParams = Object.assign({
+      eventID: eventId
+    }, params || {});
+
+    if(typeof fbq === "function"){
+      fbq("track", eventName, pixelParams);
+    }
+
     sendCapi(eventName, eventId, extraCapiData);
   }
 </script>
 
-<!-- Meta Pixel -->
+<!-- META PIXEL -->
 <script>
-  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
-  (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+!function(f,b,e,v,n,t,s)
+{
+if(f.fbq)return;
+n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;
+n.push=n;
+n.loaded=!0;
+n.version='2.0';
+n.queue=[];
+t=b.createElement(e);
+t.async=!0;
+t.src=v;
+s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)
+}
+(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
 
-  fbq('init', PIXEL_ID);
-  fbq('track', 'PageView');
+fbq('init', PIXEL_ID);
+fbq('track', 'PageView');
 </script>
+
 <noscript>
-  <img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=SEU_PIXEL_ID_AQUI&ev=PageView&noscript=1"/>
+<img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=SEU_PIXEL_ID_AQUI&ev=PageView&noscript=1"/>
 </noscript>
 
 <script>
-  // ViewContent + CAPI assim que o pixel carregar
-  window.addEventListener("load", function() {
-    trackEvent("ViewContent", { content_name: "Histórias Proibidas", value: 14.90, currency: "BRL" }, { value: 14.90 });
-  });
+window.addEventListener("load", function() {
+
+  trackEvent(
+    "ViewContent",
+    {
+      content_name: "Histórias Proibidas",
+      value: 14.90,
+      currency: "BRL"
+    },
+    {
+      value: 14.90
+    }
+  );
+
+});
 </script>
 
 <style>
@@ -115,6 +151,7 @@ body{
     color:#fff;
     font-family:'Inter',sans-serif;
     overflow-x:hidden;
+    padding-bottom:120px;
 }
 
 .container{
@@ -247,24 +284,6 @@ body{
     font-size:14px;
 }
 
-.cta{
-    width:100%;
-    border:none;
-    border-radius:18px;
-    background:linear-gradient(180deg,#ff2d2d,#c90000);
-    color:#fff;
-    font-size:20px;
-    font-weight:800;
-    padding:22px;
-    cursor:pointer;
-    box-shadow:0 0 35px rgba(255,0,0,.35);
-    transition:.2s;
-}
-
-.cta:hover{
-    transform:scale(1.02);
-}
-
 .secure{
     text-align:center;
     margin-top:14px;
@@ -280,38 +299,47 @@ body{
     line-height:1.6;
 }
 
-.blur-image{
-    margin-top:30px;
-    border-radius:20px;
-    overflow:hidden;
-    position:relative;
-}
-
-.blur-image img{
-    width:100%;
-    filter:blur(8px);
-    opacity:.8;
-}
-
-.blur-overlay{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+.floating-btn{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    width:90%;
+    max-width:420px;
     text-align:center;
-    padding:20px;
-    background:rgba(0,0,0,.35);
+    background:linear-gradient(180deg,#ff2d2d,#c90000);
+    color:#fff;
+    padding:18px;
+    border-radius:18px;
+    font-size:18px;
+    font-weight:800;
+    text-decoration:none;
+    box-shadow:0 0 35px rgba(255,0,0,.45);
+    z-index:9999;
+    animation:pulse 1.5s infinite;
+    border:none;
+    cursor:pointer;
 }
 
-.blur-overlay h2{
-    font-size:28px;
-    font-weight:800;
-    line-height:1.2;
+@keyframes pulse{
+
+    0%{
+        transform:translateX(-50%) scale(1);
+    }
+
+    50%{
+        transform:translateX(-50%) scale(1.03);
+    }
+
+    100%{
+        transform:translateX(-50%) scale(1);
+    }
+
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="top-bar">
@@ -328,7 +356,6 @@ Histórias Proibidas
 
 <div class="image-wrapper">
 
-<!-- TROQUE AQUI -->
 <img src="SUA-IMAGEM-AQUI.jpg" alt="História exclusiva">
 
 <div class="badge">
@@ -336,6 +363,7 @@ Histórias Proibidas
 </div>
 
 <div class="overlay">
+
 <h1>
 Uma história que ela nunca mostrou publicamente...
 </h1>
@@ -343,8 +371,8 @@ Uma história que ela nunca mostrou publicamente...
 <p>
 Acesso imediato ao conteúdo completo e grupo privado reservado para compradores.
 </p>
-</div>
 
+</div>
 </div>
 
 <div class="content">
@@ -354,14 +382,17 @@ Desbloqueie agora o acesso completo da história
 </div>
 
 <div class="description">
+
 Flavinha acabou de começar uma nova fase da vida...
 <br><br>
+
 Mas existe uma noite que mudou tudo — e o restante da história foi bloqueado para acesso privado.
 <br><br>
 
 <span class="highlight">
 Conteúdo exclusivo disponível apenas para membros.
 </span>
+
 </div>
 
 <div class="features">
@@ -388,25 +419,8 @@ Conteúdo exclusivo disponível apenas para membros.
 🔥 Centenas de pessoas já desbloquearam essa história
 </div>
 
-<button class="cta" onclick="trackEvent('InitiateCheckout', { value: 14.90, currency: 'BRL', content_name: 'Histórias Proibidas' }, { value: 14.90 }); window.location.href='SEU-LINK-DE-PAGAMENTO-AQUI';">
-🔓 DESBLOQUEAR ACESSO — R$14,90
-</button>
-
 <div class="secure">
 Pagamento via PIX • acesso imediato • ambiente privado
-</div>
-
-<div class="blur-image">
-
-<!-- TROQUE AQUI -->
-<img src="SUA-IMAGEM-BLUR.jpg" alt="Prévia bloqueada">
-
-<div class="blur-overlay">
-<h2>
-O restante da história está bloqueado...
-</h2>
-</div>
-
 </div>
 
 <div class="footer-text">
@@ -417,5 +431,27 @@ Este conteúdo é destinado exclusivamente para maiores de 18 anos.
 </div>
 </div>
 
+<!-- BOTÃO FLUTUANTE -->
+
+<button class="floating-btn"
+
+onclick="trackEvent(
+'InitiateCheckout',
+{
+value: 14.90,
+currency: 'BRL',
+content_name: 'Histórias Proibidas'
+},
+{
+value: 14.90
+}
+);
+window.location.href='https://app.pushinpay.com.br/service/pay/A1F7E88C-7F28-4567-A845-C901B446E684';">
+
+🔓 DESBLOQUEAR ACESSO — R$14,90
+
+</button>
+
 </body>
 </html>
+
