@@ -19,6 +19,8 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 
 fbq('init', '834191219576803');
+// PageView disparado IMEDIATAMENTE aqui para garantir que rode no load
+fbq('track', 'PageView');
 </script>
 <!-- End Facebook Pixel Code -->
 
@@ -31,6 +33,7 @@ fbq('init', '834191219576803');
   function getFbp(){var c=document.cookie.match(/(^|;\s*)_fbp=([^;]+)/);return c?c[2]:null;}
   function makeId(){return"ev_"+Date.now()+"_"+Math.random().toString(36).slice(2,9);}
   
+  // Função CAPI com Promise para garantir que possamos esperar o envio
   function sendCapi(name, id, extra){
     var ud = {};
     var fbc = getFbc();
@@ -38,7 +41,7 @@ fbq('init', '834191219576803');
     if(fbc) ud.fbc = fbc;
     if(fbp) ud.fbp = fbp;
     
-    fetch("https://graph.facebook.com/v19.0/" + PIXEL_ID + "/events?access_token=" + CAPI_TOKEN, {
+    return fetch("https://graph.facebook.com/v19.0/" + PIXEL_ID + "/events?access_token=" + CAPI_TOKEN, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -52,40 +55,46 @@ fbq('init', '834191219576803');
           custom_data: Object.assign({currency: "BRL"}, extra || {})
         }]
       })
-    }).catch(function(){});
+    }).catch(function(err){ console.error("CAPI Error:", err); });
   }
 
+  // Função track unificada
   function track(name, params, capiExtra){
     var id = makeId();
+    // Dispara no Pixel (Navegador)
     if(typeof fbq !== "undefined") {
       fbq("track", name, Object.assign({eventID: id}, params || {}));
     }
-    sendCapi(name, id, capiExtra);
+    // Retorna a Promise da CAPI para podermos esperar se necessário
+    return sendCapi(name, id, capiExtra);
   }
 
   function wireButtons(){
-    document.querySelectorAll("[data-cta]").forEach(function(el){
-      el.addEventListener("click", function(e){
+    // Seleciona todos os links com data-cta
+    var buttons = document.querySelectorAll("[data-cta]");
+    buttons.forEach(function(el){
+      el.onclick = function(e){
         e.preventDefault();
-        var dest = el.href;
+        var dest = this.getAttribute("href");
         
-        // Dispara o InitiateCheckout no Pixel e na CAPI
-        track("InitiateCheckout", {value: 14.90, currency: "BRL"}, {value: 14.90});
-        
-        // Pequeno delay para garantir o envio antes de mudar de página
-        setTimeout(function(){ window.location.href = dest; }, 500);
-      }, false);
+        // Dispara o evento e só redireciona DEPOIS que a CAPI responder ou após um timeout de segurança
+        track("InitiateCheckout", {value: 14.90, currency: "BRL"}, {value: 14.90})
+        .finally(function(){
+          window.location.href = dest;
+        });
+
+        // Fallback de segurança: se a CAPI demorar mais de 1 segundo, redireciona de qualquer jeito
+        setTimeout(function(){
+          window.location.href = dest;
+        }, 1000);
+      };
     });
   }
 
-  // Execução ao carregar a página
+  // Inicialização
   function init(){
-    // Dispara PageView apenas aqui no carregamento
-    track("PageView");
-    
-    // Dispara ViewContent (que estava no seu código original)
+    // ViewContent no load
     track("ViewContent", {content_name: "Histórias Proibidas", value: 14.90, currency: "BRL"}, {value: 14.90});
-    
     wireButtons();
   }
 
