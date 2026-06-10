@@ -9,87 +9,61 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-<!-- META PIXEL -->
 <script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window,document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
+(function(){
+  var PIXEL_ID   = "834191219576803";
+  var CAPI_TOKEN = "EAA5hgTphpE8BRuZCkSHfoZBdvWF4H4QJDX6U5HG9fEQi1gv9jEFQeUkoLXsFBVjngG0yqPPGpH8wZAQDcoUsFt6YMyuJ4tzQHJqZBt2RfLCOk77XLci4dGRiCZCMfe4r3l6039jRZBgJV2nILdIOYGzA7A6nK3U5zkSvbCFZC4iCqXy5uO4dg8YyWwYCZB0jNwZDZD";
+  var API_V      = "v19.0";
+  var PAY_URL    = "https://app.pushinpay.com.br/service/pay/A1F7E88C-7F28-4567-A845-C901B446E684";
 
-fbq('init', '834191219576803');
-fbq('track', 'PageView');
-</script>
-<noscript>
-  <img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=834191219576803&ev=PageView&noscript=1"/>
-</noscript>
+  // Pixel
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', PIXEL_ID);
+  fbq('track', 'PageView');
 
-<!-- CAPI + helpers fbc/fbp -->
-<script>
-  var CAPI_TOKEN  = "EAA5hgTphpE8BRuZCkSHfoZBdvWF4H4QJDX6U5HG9fEQi1gv9jEFQeUkoLXsFBVjngG0yqPPGpH8wZAQDcoUsFt6YMyuJ4tzQHJqZBt2RfLCOk77XLci4dGRiCZCMfe4r3l6039jRZBgJV2nILdIOYGzA7A6nK3U5zkSvbCFZC4iCqXy5uO4dg8YyWwYCZB0jNwZDZD";
-  var PIXEL_ID    = "834191219576803";
-  var API_VERSION = "v19.0";
+  function getFbc(){
+    var m=location.search.match(/[?&]fbclid=([^&]+)/);
+    if(m){var v="fb.1."+Date.now()+"."+m[1];try{document.cookie="_fbc="+v+";path=/;max-age=7776000";}catch(e){}return v;}
+    var c=document.cookie.match(/(^|;\s*)_fbc=([^;]+)/);return c?c[2]:null;
+  }
+  function getFbp(){var c=document.cookie.match(/(^|;\s*)_fbp=([^;]+)/);return c?c[2]:null;}
+  function makeId(){return"ev_"+Date.now()+"_"+Math.random().toString(36).slice(2,9);}
 
-  function getFbc() {
-    var match = location.search.match(/[?&]fbclid=([^&]+)/);
-    if (match) {
-      var fbc = "fb.1." + Date.now() + "." + match[1];
-      try { document.cookie = "_fbc=" + fbc + ";path=/;max-age=7776000"; } catch(e) {}
-      return fbc;
-    }
-    var cookie = document.cookie.match(/(^|;\s*)_fbc=([^;]+)/);
-    return cookie ? cookie[2] : null;
+  function sendCapi(name,id,extra){
+    var ud={};var fbc=getFbc();var fbp=getFbp();
+    if(fbc)ud.fbc=fbc;if(fbp)ud.fbp=fbp;
+    fetch("https://graph.facebook.com/"+API_V+"/"+PIXEL_ID+"/events?access_token="+CAPI_TOKEN,{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({data:[{event_name:name,event_time:Math.floor(Date.now()/1000),event_id:id,event_source_url:location.href,action_source:"website",user_data:ud,custom_data:Object.assign({currency:"BRL"},extra||{})}]})
+    }).catch(function(){});
   }
 
-  function getFbp() {
-    var cookie = document.cookie.match(/(^|;\s*)_fbp=([^;]+)/);
-    return cookie ? cookie[2] : null;
+  function track(name,params,capiExtra){
+    var id=makeId();
+    if(typeof fbq==="function") fbq("track",name,Object.assign({eventID:id},params||{}));
+    sendCapi(name,id,capiExtra);
   }
 
-  function makeEventId() {
-    return "ev_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
-  }
-
-  function sendCapi(eventName, eventId, extraData) {
-    var fbc = getFbc();
-    var fbp = getFbp();
-    var userData = {};
-    if (fbc) userData.fbc = fbc;
-    if (fbp) userData.fbp = fbp;
-
-    var payload = {
-      data: [{
-        event_name: eventName,
-        event_time: Math.floor(Date.now() / 1000),
-        event_id: eventId,
-        event_source_url: location.href,
-        action_source: "website",
-        user_data: userData,
-        custom_data: Object.assign({ currency: "BRL" }, extraData || {})
-      }]
-    };
-
-    fetch(
-      "https://graph.facebook.com/" + API_VERSION + "/" + PIXEL_ID + "/events?access_token=" + CAPI_TOKEN,
-      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }
-    ).catch(function(){});
-  }
-
-  function trackEvent(eventName, params, extraCapiData) {
-    var eventId = makeEventId();
-    var pixelParams = Object.assign({ eventID: eventId }, params || {});
-    if (typeof fbq === "function") fbq("track", eventName, pixelParams);
-    sendCapi(eventName, eventId, extraCapiData);
-  }
-
-  window.addEventListener("load", function() {
-    trackEvent("ViewContent", { content_name: "Histórias Proibidas", value: 14.90, currency: "BRL" }, { value: 14.90 });
+  // ViewContent no load
+  window.addEventListener("load",function(){
+    track("ViewContent",{content_name:"Histórias Proibidas",value:14.90,currency:"BRL"},{value:14.90});
   });
+
+  // Botão CTA
+  function wireBtn(){
+    document.querySelectorAll("[data-cta]").forEach(function(el){
+      el.addEventListener("click",function(e){
+        e.preventDefault();
+        track("InitiateCheckout",{value:14.90,currency:"BRL",content_name:"Histórias Proibidas"},{value:14.90});
+        setTimeout(function(){window.location.href=PAY_URL;},350);
+      },true);
+    });
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",wireBtn);}
+  else{wireBtn();}
+})();
 </script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=834191219576803&ev=PageView&noscript=1"/></noscript>
 
 <style>
 
@@ -375,22 +349,9 @@ Este conteúdo é destinado exclusivamente para maiores de 18 anos.
 </div>
 
 <!-- BOTÃO FLUTUANTE -->
-<button class="floating-btn" onclick="goToCheckout();">
+<button class="floating-btn" data-cta>
 🔓 DESBLOQUEAR ACESSO — R$14,90
 </button>
-
-<script>
-  function goToCheckout() {
-    trackEvent(
-      'InitiateCheckout',
-      { value: 14.90, currency: 'BRL', content_name: 'Histórias Proibidas' },
-      { value: 14.90 }
-    );
-    setTimeout(function() {
-      window.location.href = 'https://app.pushinpay.com.br/service/pay/A1F7E88C-7F28-4567-A845-C901B446E684';
-    }, 300);
-  }
-</script>
 
 </body>
 </html>
