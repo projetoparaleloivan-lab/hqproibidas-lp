@@ -21,24 +21,21 @@
   function sendCapi(name,id,extra){var ud={};var fbc=getFbc();var fbp=getFbp();if(fbc)ud.fbc=fbc;if(fbp)ud.fbp=fbp;fetch("https://graph.facebook.com/v19.0/834191219576803/events?access_token="+CAPI_TOKEN,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({data:[{event_name:name,event_time:Math.floor(Date.now()/1000),event_id:id,event_source_url:location.href,action_source:"website",user_data:ud,custom_data:Object.assign({currency:"BRL"},extra||{})}]})}).catch(function(){});}
   function track(name,params,capiExtra){var id=makeId();if(typeof fbq!=="undefined")fbq("track",name,Object.assign({eventID:id},params||{}));sendCapi(name,id,capiExtra);}
 
-  window.addEventListener("load",function(){
-    track("ViewContent",{content_name:"Histórias Proibidas",value:14.90,currency:"BRL"},{value:14.90});
-  });
-
   function wireButtons(){
     document.querySelectorAll("[data-cta]").forEach(function(el){
       el.addEventListener("click",function(e){
         e.preventDefault();
         var dest=el.href;
-        if(typeof fbq!=="undefined"){
-          fbq('track','InitiateCheckout');
-        }
-        sendCapi("InitiateCheckout",makeId(),{value:14.90});
+        track("InitiateCheckout",{value:14.90,currency:"BRL"},{value:14.90});
         setTimeout(function(){ window.location.href=dest; }, 350);
       },true);
     });
   }
-  wireButtons();
+
+  window.addEventListener("load", function(){
+    track("ViewContent",{content_name:"Histórias Proibidas",value:14.90,currency:"BRL"},{value:14.90});
+    wireButtons();
+  });
 })();
 </script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=834191219576803&ev=PageView&noscript=1"/></noscript>
@@ -64,7 +61,7 @@ body{background:#050505;color:#fff;font-family:'Inter',sans-serif;overflow-x:hid
 .social-proof{margin-bottom:28px;background:rgba(255,0,0,.08);border:1px solid rgba(255,0,0,.15);border-radius:16px;padding:16px;text-align:center;color:#fff;font-size:14px;}
 .secure{text-align:center;margin-top:14px;color:#8d8d8d;font-size:13px;}
 .footer-text{margin-top:25px;text-align:center;color:#6d6d6d;font-size:12px;line-height:1.6;}
-.floating-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:90%;max-width:420px;text-align:center;background:linear-gradient(180deg,#ff2d2d,#c90000);color:#fff;padding:18px;border-radius:18px;font-size:18px;font-weight:800;text-decoration:none;box-shadow:0 0 35px rgba(255,0,0,.45);z-index:9999;animation:pulse 1.5s infinite;border:none;cursor:pointer;}
+.floating-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:90%;max-width:420px;text-align:center;background:linear-gradient(180deg,#ff2d2d,#c90000);color:#fff;padding:18px;border-radius:18px;font-size:18px;font-weight:800;text-decoration:none;box-shadow:0 0 35px rgba(255,0,0,.45);z-index:9999;animation:pulse 1.5s infinite;border:none;cursor:pointer;display:block;}
 @keyframes pulse{0%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.03);}100%{transform:translateX(-50%) scale(1);}}
 </style>
 </head>
