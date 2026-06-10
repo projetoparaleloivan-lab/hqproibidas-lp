@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-<!-- Facebook Pixel Code -->
+<!-- Facebook Pixel Code (ID Original da LP1) -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -19,93 +19,21 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 
 fbq('init', '834191219576803');
-// PageView disparado IMEDIATAMENTE aqui para garantir que rode no load
 fbq('track', 'PageView');
+
+// Lógica de disparo igual à da LP2 (Comunidade do Jota)
+async function dispararCheckout() {
+  // Dispara o InitiateCheckout no Pixel
+  fbq('track', 'InitiateCheckout', {value: 14.90, currency: 'BRL'});
+  
+  // Como você pediu para tirar o CAPI, removi a parte do fetch/CAPI
+  // Mas mantive a estrutura de função que você gosta da outra LP
+}
 </script>
 <!-- End Facebook Pixel Code -->
 
-<script>
-(function(){
-  var CAPI_TOKEN = "EAA5hgTphpE8BRuZCkSHfoZBdvWF4H4QJDX6U5HG9fEQi1gv9jEFQeUkoLXsFBVjngG0yqPPGpH8wZAQDcoUsFt6YMyuJ4tzQHJqZBt2RfLCOk77XLci4dGRiCZCMfe4r3l6039jRZBgJV2nILdIOYGzA7A6nK3U5zkSvbCFZC4iCqXy5uO4dg8YyWwYCZB0jNwZDZD";
-  var PIXEL_ID = "834191219576803";
-
-  function getFbc(){var m=location.search.match(/[?&]fbclid=([^&]+)/);if(m){var v="fb.1."+Date.now()+"."+m[1];try{document.cookie="_fbc="+v+";path=/;max-age=7776000";}catch(e){}return v;}var c=document.cookie.match(/(^|;\s*)_fbc=([^;]+)/);return c?c[2]:null;}
-  function getFbp(){var c=document.cookie.match(/(^|;\s*)_fbp=([^;]+)/);return c?c[2]:null;}
-  function makeId(){return"ev_"+Date.now()+"_"+Math.random().toString(36).slice(2,9);}
-  
-  // Função CAPI com Promise para garantir que possamos esperar o envio
-  function sendCapi(name, id, extra){
-    var ud = {};
-    var fbc = getFbc();
-    var fbp = getFbp();
-    if(fbc) ud.fbc = fbc;
-    if(fbp) ud.fbp = fbp;
-    
-    return fetch("https://graph.facebook.com/v19.0/" + PIXEL_ID + "/events?access_token=" + CAPI_TOKEN, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        data: [{
-          event_name: name,
-          event_time: Math.floor(Date.now()/1000),
-          event_id: id,
-          event_source_url: location.href,
-          action_source: "website",
-          user_data: ud,
-          custom_data: Object.assign({currency: "BRL"}, extra || {})
-        }]
-      })
-    }).catch(function(err){ console.error("CAPI Error:", err); });
-  }
-
-  // Função track unificada
-  function track(name, params, capiExtra){
-    var id = makeId();
-    // Dispara no Pixel (Navegador)
-    if(typeof fbq !== "undefined") {
-      fbq("track", name, Object.assign({eventID: id}, params || {}));
-    }
-    // Retorna a Promise da CAPI para podermos esperar se necessário
-    return sendCapi(name, id, capiExtra);
-  }
-
-  function wireButtons(){
-    // Seleciona todos os links com data-cta
-    var buttons = document.querySelectorAll("[data-cta]");
-    buttons.forEach(function(el){
-      el.onclick = function(e){
-        e.preventDefault();
-        var dest = this.getAttribute("href");
-        
-        // Dispara o evento e só redireciona DEPOIS que a CAPI responder ou após um timeout de segurança
-        track("InitiateCheckout", {value: 14.90, currency: "BRL"}, {value: 14.90})
-        .finally(function(){
-          window.location.href = dest;
-        });
-
-        // Fallback de segurança: se a CAPI demorar mais de 1 segundo, redireciona de qualquer jeito
-        setTimeout(function(){
-          window.location.href = dest;
-        }, 1000);
-      };
-    });
-  }
-
-  // Inicialização
-  function init(){
-    // ViewContent no load
-    track("ViewContent", {content_name: "Histórias Proibidas", value: 14.90, currency: "BRL"}, {value: 14.90});
-    wireButtons();
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-})();
-</script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=834191219576803&ev=PageView&noscript=1"/></noscript>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#050505;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden;padding-bottom:120px;}
@@ -178,7 +106,8 @@ Mas existe uma noite que mudou tudo — e o restante da história foi bloqueado 
 </div>
 </div>
 
-<a href="https://app.pushinpay.com.br/service/pay/A1F7E88C-7F28-4567-A845-C901B446E684" class="floating-btn" data-cta>
+<!-- Botão com a mesma lógica da LP2 (onclick direto chamando a função) -->
+<a href="https://app.pushinpay.com.br/service/pay/A1F7E88C-7F28-4567-A845-C901B446E684" class="floating-btn" onclick="dispararCheckout()">
 🔓 DESBLOQUEAR ACESSO — R$14,90
 </a>
 
