@@ -375,10 +375,22 @@ Este conteúdo é destinado exclusivamente para maiores de 18 anos.
 </div>
 
 <!-- BOTÃO FLUTUANTE -->
-<button class="floating-btn"
-  onclick="trackEvent('InitiateCheckout',{value:14.90,currency:'BRL',content_name:'Histórias Proibidas'},{value:14.90});window.location.href='https://app.pushinpay.com.br/service/pay/A1F7E88C-7F28-4567-A845-C901B446E684';">
+<button class="floating-btn" onclick="goToCheckout();">
 🔓 DESBLOQUEAR ACESSO — R$14,90
 </button>
+
+<script>
+  function goToCheckout() {
+    trackEvent(
+      'InitiateCheckout',
+      { value: 14.90, currency: 'BRL', content_name: 'Histórias Proibidas' },
+      { value: 14.90 }
+    );
+    setTimeout(function() {
+      window.location.href = 'https://app.pushinpay.com.br/service/pay/A1F7E88C-7F28-4567-A845-C901B446E684';
+    }, 300);
+  }
+</script>
 
 </body>
 </html>
