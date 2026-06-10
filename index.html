@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
+<!-- Facebook Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -18,8 +19,8 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 
 fbq('init', '834191219576803');
-fbq('track', 'PageView');
 </script>
+<!-- End Facebook Pixel Code -->
 
 <script>
 (function(){
@@ -68,22 +69,30 @@ fbq('track', 'PageView');
         e.preventDefault();
         var dest = el.href;
         
+        // Dispara o InitiateCheckout no Pixel e na CAPI
         track("InitiateCheckout", {value: 14.90, currency: "BRL"}, {value: 14.90});
         
-        setTimeout(function(){ window.location.href = dest; }, 400);
-      }, true);
+        // Pequeno delay para garantir o envio antes de mudar de página
+        setTimeout(function(){ window.location.href = dest; }, 500);
+      }, false);
     });
   }
 
-  // Roda assim que o DOM carregar estruturalmente
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", function(){
-      track("ViewContent", {content_name: "Histórias Proibidas", value: 14.90, currency: "BRL"}, {value: 14.90});
-      wireButtons();
-    });
-  } else {
+  // Execução ao carregar a página
+  function init(){
+    // Dispara PageView apenas aqui no carregamento
+    track("PageView");
+    
+    // Dispara ViewContent (que estava no seu código original)
     track("ViewContent", {content_name: "Histórias Proibidas", value: 14.90, currency: "BRL"}, {value: 14.90});
+    
     wireButtons();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
   }
 })();
 </script>
