@@ -29,11 +29,12 @@
     document.querySelectorAll("[data-cta]").forEach(function(el){
       el.addEventListener("click",function(e){
         e.preventDefault();
+        var dest=el.href;
         if(typeof fbq!=="undefined"){
           fbq('track','InitiateCheckout');
         }
         sendCapi("InitiateCheckout",makeId(),{value:14.90});
-        setTimeout(function(){ window.location.href=PAY_URL; }, 350);
+        setTimeout(function(){ window.location.href=dest; }, 350);
       },true);
     });
   }
@@ -113,9 +114,9 @@ Mas existe uma noite que mudou tudo — e o restante da história foi bloqueado 
 </div>
 </div>
 
-<button class="floating-btn" data-cta>
+<a href="https://app.pushinpay.com.br/service/pay/A1F7E88C-7F28-4567-A845-C901B446E684" class="floating-btn" data-cta>
 🔓 DESBLOQUEAR ACESSO — R$14,90
-</button>
+</a>
 
 </body>
 </html>
