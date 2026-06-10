@@ -6,18 +6,25 @@
 <title>Histórias Proibidas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+
+fbq('init', '834191219576803');
+fbq('track', 'PageView');
+</script>
+
 <script>
 (function(){
-  var PAY_URL = "https://app.pushinpay.com.br/service/pay/A1F7E88C-7F28-4567-A845-C901B446E684";
   var CAPI_TOKEN = "EAA5hgTphpE8BRuZCkSHfoZBdvWF4H4QJDX6U5HG9fEQi1gv9jEFQeUkoLXsFBVjngG0yqPPGpH8wZAQDcoUsFt6YMyuJ4tzQHJqZBt2RfLCOk77XLci4dGRiCZCMfe4r3l6039jRZBgJV2nILdIOYGzA7A6nK3U5zkSvbCFZC4iCqXy5uO4dg8YyWwYCZB0jNwZDZD";
   var PIXEL_ID = "834191219576803";
-
-  // Inicialização padrão do Facebook Pixel
-  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-  
-  fbq('init', PIXEL_ID);
-  // Dispara o PageView do navegador IMEDIATAMENTE (sem esperar imagens pesadas carregarem)
-  fbq('track', 'PageView');
 
   function getFbc(){var m=location.search.match(/[?&]fbclid=([^&]+)/);if(m){var v="fb.1."+Date.now()+"."+m[1];try{document.cookie="_fbc="+v+";path=/;max-age=7776000";}catch(e){}return v;}var c=document.cookie.match(/(^|;\s*)_fbc=([^;]+)/);return c?c[2]:null;}
   function getFbp(){var c=document.cookie.match(/(^|;\s*)_fbp=([^;]+)/);return c?c[2]:null;}
@@ -61,16 +68,14 @@
         e.preventDefault();
         var dest = el.href;
         
-        // Dispara o InitiateCheckout CORRETAMENTE com os valores corretos
         track("InitiateCheckout", {value: 14.90, currency: "BRL"}, {value: 14.90});
         
-        // Delay seguro para garantir que a requisição de rastreamento saia antes do redirecionamento
         setTimeout(function(){ window.location.href = dest; }, 400);
       }, true);
     });
   }
 
-  // Executa assim que o HTML estiver pronto para interação
+  // Roda assim que o DOM carregar estruturalmente
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function(){
       track("ViewContent", {content_name: "Histórias Proibidas", value: 14.90, currency: "BRL"}, {value: 14.90});
