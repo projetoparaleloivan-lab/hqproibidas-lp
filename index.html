@@ -1,355 +1,421 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Histórias Proibidas 🔞</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <!-- Meta Pixel -->
-  <script>
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '834191219576803');
-    fbq('track', 'PageView');
-    fbq('track', 'ViewContent');
-  </script>
-  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=834191219576803&ev=PageView&noscript=1"/></noscript>
+<title>Histórias Proibidas</title>
 
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-    body {
-      background: #060d17;
-      color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow-x: hidden;
-    }
+<!-- ═══════════════════════════════════════════════════
+     META PIXEL + CAPI — configuração
+     Preencha as constantes abaixo antes de publicar.
+═══════════════════════════════════════════════════ -->
+<script>
+  // ── CONFIGURAÇÃO ──────────────────────────────────
+  var PIXEL_ID    = "SEU_PIXEL_ID_AQUI";       // ex: "1234567890123456"
+  var CAPI_TOKEN  = "SEU_ACCESS_TOKEN_AQUI";   // token do System User ou token da conta
+  var API_VERSION = "v19.0";
+  // ─────────────────────────────────────────────────
 
-    /* TOP BAR */
-    .topbar {
-      width: 100%;
-      background: rgba(0,0,0,0.7);
-      border-bottom: 1px solid rgba(41,182,246,0.2);
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(8px);
+  // Captura fbc a partir do fbclid na URL (padrão Meta)
+  function getFbc() {
+    var match = location.search.match(/[?&]fbclid=([^&]+)/);
+    if (match) {
+      var fbc = "fb.1." + Date.now() + "." + match[1];
+      try { document.cookie = "_fbc=" + fbc + ";path=/;max-age=7776000"; } catch(e) {}
+      return fbc;
     }
-    .topbar-title { font-size: 13px; font-weight: 700; color: #29b6f6; letter-spacing: 0.5px; }
-    .topbar-badge {
-      font-size: 10px;
-      background: rgba(41,182,246,0.12);
-      border: 1px solid rgba(41,182,246,0.35);
-      color: #64d0f7;
-      padding: 3px 10px;
-      border-radius: 20px;
-      letter-spacing: 1px;
-    }
+    var cookie = document.cookie.match(/(^|;\s*)_fbc=([^;]+)/);
+    return cookie ? cookie[2] : null;
+  }
 
-    /* URGENCY BANNER */
-    .urgency-bar {
-      width: 100%;
-      background: linear-gradient(90deg, #b71c1c, #e53935);
-      padding: 8px 16px;
-      text-align: center;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      animation: pulse-bar 2s ease-in-out infinite;
-    }
-    @keyframes pulse-bar {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.85; }
-    }
+  // Lê fbp do cookie _fbp (setado automaticamente pelo pixel)
+  function getFbp() {
+    var cookie = document.cookie.match(/(^|;\s*)_fbp=([^;]+)/);
+    return cookie ? cookie[2] : null;
+  }
 
-    /* MAIN CONTENT */
-    .content {
-      width: 100%;
-      max-width: 480px;
-      padding: 20px 16px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
+  // Gera event_id único para deduplicação pixel ↔ CAPI
+  function makeEventId() {
+    return "ev_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
+  }
 
-    /* COVER IMAGE */
-    .cover-wrap {
-      width: 100%;
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 16px 48px rgba(0,0,0,0.8), 0 0 0 1px rgba(41,182,246,0.15);
-    }
-    .cover-wrap img {
-      width: 100%;
-      display: block;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-    .cover-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(0,0,0,0.75);
-      border: 1px solid rgba(41,182,246,0.4);
-      color: #29b6f6;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-      backdrop-filter: blur(4px);
-      letter-spacing: 1px;
-    }
-    .cover-lock {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 40px 16px 16px;
-      background: linear-gradient(to top, rgba(6,13,23,0.95) 40%, transparent);
-      text-align: center;
-      font-size: 13px;
-      color: #a0b0c0;
-    }
-    .cover-lock strong { color: #fff; }
+  // Dispara evento via CAPI (server-side simulado do cliente)
+  function sendCapi(eventName, eventId, extraData) {
+    if (!CAPI_TOKEN || CAPI_TOKEN === "SEU_ACCESS_TOKEN_AQUI") return;
+    var fbc = getFbc();
+    var fbp = getFbp();
+    var userData = {};
+    if (fbc) userData.fbc = fbc;
+    if (fbp) userData.fbp = fbp;
 
-    /* TEASER TEXT */
-    .teaser {
-      text-align: center;
-      font-size: 15px;
-      line-height: 1.65;
-      color: #8090a0;
-    }
-    .teaser strong { color: #e0e8f0; }
+    var payload = {
+      data: [{
+        event_name: eventName,
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: eventId,
+        event_source_url: location.href,
+        action_source: "website",
+        user_data: userData,
+        custom_data: Object.assign({ currency: "BRL" }, extraData || {})
+      }]
+    };
 
-    /* COUNTDOWN */
-    .countdown-wrap {
-      width: 100%;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      padding: 14px 16px;
-      text-align: center;
-    }
-    .countdown-label {
-      font-size: 11px;
-      color: #506070;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .countdown-timer {
-      font-size: 28px;
-      font-weight: 900;
-      color: #29b6f6;
-      letter-spacing: 3px;
-      font-variant-numeric: tabular-nums;
-    }
-    .countdown-sub {
-      font-size: 11px;
-      color: #405060;
-      margin-top: 4px;
-    }
+    fetch(
+      "https://graph.facebook.com/" + API_VERSION + "/" + PIXEL_ID + "/events?access_token=" + CAPI_TOKEN,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }
+    ).catch(function() {});
+  }
 
-    /* SOCIAL PROOF */
-    .social-proof {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(41,182,246,0.06);
-      border: 1px solid rgba(41,182,246,0.15);
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 12px;
-      color: #6090b0;
-      width: 100%;
-    }
-    .social-proof span { font-size: 18px; }
-    .social-proof strong { color: #29b6f6; }
+  // Dispara evento no pixel + CAPI com mesmo event_id (deduplicação)
+  function trackEvent(eventName, params, extraCapiData) {
+    var eventId = makeEventId();
+    var pixelParams = Object.assign({ eventID: eventId }, params || {});
+    if (typeof fbq === "function") fbq("track", eventName, pixelParams);
+    sendCapi(eventName, eventId, extraCapiData);
+  }
+</script>
 
-    /* CTA BUTTON */
-    .cta-section {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
+<!-- Meta Pixel -->
+<script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+  (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
-    .cta-btn {
-      display: block;
-      width: 100%;
-      padding: 22px 24px;
-      background: linear-gradient(135deg, #0077bb, #29b6f6);
-      color: #fff;
-      font-size: 20px;
-      font-weight: 900;
-      text-decoration: none;
-      border-radius: 16px;
-      letter-spacing: 0.3px;
-      box-shadow: 0 8px 32px rgba(0,136,204,0.5), 0 0 0 0 rgba(41,182,246,0.4);
-      animation: pulseCta 1.8s ease-in-out infinite;
-      text-align: center;
-      touch-action: manipulation;
-    }
-    @keyframes pulseCta {
-      0%, 100% { box-shadow: 0 8px 32px rgba(0,136,204,0.5), 0 0 0 0 rgba(41,182,246,0.4); }
-      50%       { box-shadow: 0 8px 50px rgba(0,136,204,0.7), 0 0 0 8px rgba(41,182,246,0); }
-    }
-    .cta-btn:active { transform: scale(0.98); }
+  fbq('init', PIXEL_ID);
+  fbq('track', 'PageView');
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=SEU_PIXEL_ID_AQUI&ev=PageView&noscript=1"/>
+</noscript>
 
-    .cta-price {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-size: 12px;
-      color: #405060;
-    }
-    .cta-price .old-price {
-      text-decoration: line-through;
-      color: #304050;
-    }
-    .cta-price .new-price {
-      color: #29b6f6;
-      font-weight: 700;
-    }
+<script>
+  // ViewContent + CAPI assim que o pixel carregar
+  window.addEventListener("load", function() {
+    trackEvent("ViewContent", { content_name: "Histórias Proibidas", value: 14.90, currency: "BRL" }, { value: 14.90 });
+  });
+</script>
 
-    .cta-trust {
-      font-size: 11px;
-      color: #304050;
-      text-align: center;
-    }
+<style>
 
-    /* DISCLAIMER */
-    .disclaimer {
-      font-size: 10px;
-      color: #253040;
-      text-align: center;
-      padding: 0 8px;
-      line-height: 1.5;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-    /* STICKY CTA */
-    .sticky-cta {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 200;
-      padding: 12px 16px 20px;
-      background: linear-gradient(to top, rgba(6,13,23,1) 60%, transparent);
-    }
-    .sticky-cta a {
-      display: block;
-      width: 100%;
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 18px 24px;
-      background: linear-gradient(135deg, #0077bb, #29b6f6);
-      color: #fff;
-      font-size: 18px;
-      font-weight: 900;
-      text-decoration: none;
-      border-radius: 16px;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0,136,204,0.6);
-      animation: pulseCta 1.8s ease-in-out infinite;
-      touch-action: manipulation;
-    }
+body{
+    background:#050505;
+    color:#fff;
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+}
 
-  </style>
+.container{
+    width:100%;
+    max-width:480px;
+    margin:auto;
+    padding:20px;
+}
+
+.top-bar{
+    width:100%;
+    background:linear-gradient(90deg,#ff0000,#ff3b3b);
+    text-align:center;
+    padding:12px;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.5px;
+    box-shadow:0 0 25px rgba(255,0,0,.4);
+}
+
+.logo{
+    text-align:center;
+    margin-top:18px;
+    font-size:24px;
+    font-weight:800;
+    color:#ff3b3b;
+}
+
+.hero{
+    margin-top:25px;
+    background:#0f0f0f;
+    border-radius:26px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 0 35px rgba(255,0,0,.15);
+}
+
+.image-wrapper{
+    position:relative;
+}
+
+.image-wrapper img{
+    width:100%;
+    display:block;
+}
+
+.badge{
+    position:absolute;
+    top:18px;
+    left:18px;
+    background:rgba(0,0,0,.75);
+    border:1px solid rgba(255,255,255,.1);
+    color:#fff;
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+    backdrop-filter:blur(8px);
+}
+
+.overlay{
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    padding:35px 20px 20px;
+    background:linear-gradient(to top,#000 5%,transparent);
+}
+
+.overlay h1{
+    font-size:28px;
+    line-height:1.1;
+    font-weight:800;
+    margin-bottom:10px;
+}
+
+.overlay p{
+    color:#ddd;
+    font-size:15px;
+    line-height:1.5;
+}
+
+.content{
+    padding:25px;
+}
+
+.title{
+    font-size:26px;
+    font-weight:800;
+    line-height:1.2;
+    margin-bottom:16px;
+}
+
+.description{
+    color:#b8b8b8;
+    font-size:15px;
+    line-height:1.7;
+    margin-bottom:22px;
+}
+
+.highlight{
+    color:#ff4d4d;
+    font-weight:700;
+}
+
+.features{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin-bottom:28px;
+}
+
+.feature{
+    background:#131313;
+    border:1px solid rgba(255,255,255,.05);
+    border-radius:16px;
+    padding:16px;
+    font-size:14px;
+    color:#ddd;
+}
+
+.social-proof{
+    margin-bottom:28px;
+    background:rgba(255,0,0,.08);
+    border:1px solid rgba(255,0,0,.15);
+    border-radius:16px;
+    padding:16px;
+    text-align:center;
+    color:#fff;
+    font-size:14px;
+}
+
+.cta{
+    width:100%;
+    border:none;
+    border-radius:18px;
+    background:linear-gradient(180deg,#ff2d2d,#c90000);
+    color:#fff;
+    font-size:20px;
+    font-weight:800;
+    padding:22px;
+    cursor:pointer;
+    box-shadow:0 0 35px rgba(255,0,0,.35);
+    transition:.2s;
+}
+
+.cta:hover{
+    transform:scale(1.02);
+}
+
+.secure{
+    text-align:center;
+    margin-top:14px;
+    color:#8d8d8d;
+    font-size:13px;
+}
+
+.footer-text{
+    margin-top:25px;
+    text-align:center;
+    color:#6d6d6d;
+    font-size:12px;
+    line-height:1.6;
+}
+
+.blur-image{
+    margin-top:30px;
+    border-radius:20px;
+    overflow:hidden;
+    position:relative;
+}
+
+.blur-image img{
+    width:100%;
+    filter:blur(8px);
+    opacity:.8;
+}
+
+.blur-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:20px;
+    background:rgba(0,0,0,.35);
+}
+
+.blur-overlay h2{
+    font-size:28px;
+    font-weight:800;
+    line-height:1.2;
+}
+
+</style>
 </head>
 <body>
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <span class="topbar-title">✈️ Histórias Proibidas</span>
-    <span class="topbar-badge">🔞 +18</span>
-  </div>
+<div class="top-bar">
+🔥 ACESSO PRIVADO LIBERADO HOJE — R$14,90
+</div>
 
-  <!-- URGENCY BANNER -->
-  <div class="urgency-bar">
-    🔥 OFERTA RELÂMPAGO — Apenas hoje por R$14,90
-  </div>
+<div class="container">
 
-  <div class="content">
+<div class="logo">
+Histórias Proibidas
+</div>
 
-    <!-- COVER -->
-    <div class="cover-wrap">
-      <img src="pages/page01.jpg" alt="Histórias Proibidas — Flavinha" loading="eager" />
-      <div class="cover-badge">🔞 +18 · EXCLUSIVO</div>
-      <div class="cover-lock">
-        <strong>O restante da história está bloqueado...</strong><br/>
-        Desbloqueie agora e veja tudo 🔥
-      </div>
-    </div>
+<div class="hero">
 
-    <!-- TEASER -->
-    <p class="teaser">
-      Flavinha tem 18 anos e uma história que ela nunca contou pra ninguém.<br/><br/>
-      <strong>Uma noite que mudou tudo — e você vai querer saber como termina.</strong>
-    </p>
+<div class="image-wrapper">
 
-    <!-- COUNTDOWN -->
-    <div class="countdown-wrap">
-      <div class="countdown-label">⏰ Oferta expira em</div>
-      <div class="countdown-timer" id="timer">14:59</div>
-      <div class="countdown-sub">Após esse tempo o valor sobe para R$29,90</div>
-    </div>
+<!-- TROQUE AQUI -->
+<img src="SUA-IMAGEM-AQUI.jpg" alt="História exclusiva">
 
-    <!-- SOCIAL PROOF -->
-    <div class="social-proof">
-      <span>🔥</span>
-      <div><strong>247 pessoas</strong> acessaram a história completa essa semana</div>
-    </div>
+<div class="badge">
+🔒 CONTEÚDO PRIVADO +18
+</div>
 
-    <p class="cta-trust" style="text-align:center; font-size:11px; color:#304050;">🔒 Pagamento seguro · Acesso imediato · Sem assinatura</p>
+<div class="overlay">
+<h1>
+Uma história que ela nunca mostrou publicamente...
+</h1>
 
-    <p class="disclaimer">
-      Conteúdo exclusivo para maiores de 18 anos.<br/>
-      Ao adquirir você confirma ser maior de idade.
-    </p>
+<p>
+Acesso imediato ao conteúdo completo e grupo privado reservado para compradores.
+</p>
+</div>
 
-  </div>
+</div>
 
-  <!-- STICKY CTA -->
-  <div class="sticky-cta">
-    <a
-      href="https://app.pushinpay.com.br/service/pay/A1F7E88C-7F28-4567-A845-C901B446E684"
-      onclick="fbq('track','AddToCart');"
-    >
-      🔓 VER HISTÓRIA COMPLETA — R$14,90
-    </a>
-  </div>
+<div class="content">
 
-<script>
-    // Countdown timer — 15 minutes, persisted in sessionStorage
-    const KEY = '_hq_cd';
-    let end = parseInt(sessionStorage.getItem(KEY) || '0');
-    if (!end || end < Date.now()) {
-      end = Date.now() + 15 * 60 * 1000;
-      sessionStorage.setItem(KEY, end);
-    }
+<div class="title">
+Desbloqueie agora o acesso completo da história
+</div>
 
-    const timerEl = document.getElementById('timer');
-    function tick() {
-      const diff = Math.max(0, end - Date.now());
-      const m = Math.floor(diff / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      timerEl.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-      if (diff > 0) requestAnimationFrame(tick);
-      else timerEl.textContent = '00:00';
-    }
-    tick();
-  </script>
+<div class="description">
+Flavinha acabou de começar uma nova fase da vida...
+<br><br>
+Mas existe uma noite que mudou tudo — e o restante da história foi bloqueado para acesso privado.
+<br><br>
+
+<span class="highlight">
+Conteúdo exclusivo disponível apenas para membros.
+</span>
+</div>
+
+<div class="features">
+
+<div class="feature">
+✅ Acesso imediato após pagamento
+</div>
+
+<div class="feature">
+✅ Grupo privado reservado para compradores
+</div>
+
+<div class="feature">
+✅ Conteúdo exclusivo para membros
+</div>
+
+<div class="feature">
+✅ Não disponível publicamente
+</div>
+
+</div>
+
+<div class="social-proof">
+🔥 Centenas de pessoas já desbloquearam essa história
+</div>
+
+<button class="cta" onclick="trackEvent('InitiateCheckout', { value: 14.90, currency: 'BRL', content_name: 'Histórias Proibidas' }, { value: 14.90 }); window.location.href='SEU-LINK-DE-PAGAMENTO-AQUI';">
+🔓 DESBLOQUEAR ACESSO — R$14,90
+</button>
+
+<div class="secure">
+Pagamento via PIX • acesso imediato • ambiente privado
+</div>
+
+<div class="blur-image">
+
+<!-- TROQUE AQUI -->
+<img src="SUA-IMAGEM-BLUR.jpg" alt="Prévia bloqueada">
+
+<div class="blur-overlay">
+<h2>
+O restante da história está bloqueado...
+</h2>
+</div>
+
+</div>
+
+<div class="footer-text">
+Este conteúdo é destinado exclusivamente para maiores de 18 anos.
+</div>
+
+</div>
+</div>
+</div>
+
 </body>
 </html>
