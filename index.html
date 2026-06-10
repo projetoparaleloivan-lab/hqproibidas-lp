@@ -10,32 +10,76 @@
 (function(){
   var PAY_URL = "https://app.pushinpay.com.br/service/pay/A1F7E88C-7F28-4567-A845-C901B446E684";
   var CAPI_TOKEN = "EAA5hgTphpE8BRuZCkSHfoZBdvWF4H4QJDX6U5HG9fEQi1gv9jEFQeUkoLXsFBVjngG0yqPPGpH8wZAQDcoUsFt6YMyuJ4tzQHJqZBt2RfLCOk77XLci4dGRiCZCMfe4r3l6039jRZBgJV2nILdIOYGzA7A6nK3U5zkSvbCFZC4iCqXy5uO4dg8YyWwYCZB0jNwZDZD";
+  var PIXEL_ID = "834191219576803";
 
+  // Inicialização padrão do Facebook Pixel
   !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init','834191219576803');
-  fbq('track','PageView');
+  
+  fbq('init', PIXEL_ID);
+  // Dispara o PageView do navegador IMEDIATAMENTE (sem esperar imagens pesadas carregarem)
+  fbq('track', 'PageView');
 
   function getFbc(){var m=location.search.match(/[?&]fbclid=([^&]+)/);if(m){var v="fb.1."+Date.now()+"."+m[1];try{document.cookie="_fbc="+v+";path=/;max-age=7776000";}catch(e){}return v;}var c=document.cookie.match(/(^|;\s*)_fbc=([^;]+)/);return c?c[2]:null;}
   function getFbp(){var c=document.cookie.match(/(^|;\s*)_fbp=([^;]+)/);return c?c[2]:null;}
   function makeId(){return"ev_"+Date.now()+"_"+Math.random().toString(36).slice(2,9);}
-  function sendCapi(name,id,extra){var ud={};var fbc=getFbc();var fbp=getFbp();if(fbc)ud.fbc=fbc;if(fbp)ud.fbp=fbp;fetch("https://graph.facebook.com/v19.0/834191219576803/events?access_token="+CAPI_TOKEN,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({data:[{event_name:name,event_time:Math.floor(Date.now()/1000),event_id:id,event_source_url:location.href,action_source:"website",user_data:ud,custom_data:Object.assign({currency:"BRL"},extra||{})}]})}).catch(function(){});}
-  function track(name,params,capiExtra){var id=makeId();if(typeof fbq!=="undefined")fbq("track",name,Object.assign({eventID:id},params||{}));sendCapi(name,id,capiExtra);}
+  
+  function sendCapi(name, id, extra){
+    var ud = {};
+    var fbc = getFbc();
+    var fbp = getFbp();
+    if(fbc) ud.fbc = fbc;
+    if(fbp) ud.fbp = fbp;
+    
+    fetch("https://graph.facebook.com/v19.0/" + PIXEL_ID + "/events?access_token=" + CAPI_TOKEN, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        data: [{
+          event_name: name,
+          event_time: Math.floor(Date.now()/1000),
+          event_id: id,
+          event_source_url: location.href,
+          action_source: "website",
+          user_data: ud,
+          custom_data: Object.assign({currency: "BRL"}, extra || {})
+        }]
+      })
+    }).catch(function(){});
+  }
+
+  function track(name, params, capiExtra){
+    var id = makeId();
+    if(typeof fbq !== "undefined") {
+      fbq("track", name, Object.assign({eventID: id}, params || {}));
+    }
+    sendCapi(name, id, capiExtra);
+  }
 
   function wireButtons(){
     document.querySelectorAll("[data-cta]").forEach(function(el){
-      el.addEventListener("click",function(e){
+      el.addEventListener("click", function(e){
         e.preventDefault();
-        var dest=el.href;
-        track("InitiateCheckout",{value:14.90,currency:"BRL"},{value:14.90});
-        setTimeout(function(){ window.location.href=dest; }, 350);
-      },true);
+        var dest = el.href;
+        
+        // Dispara o InitiateCheckout CORRETAMENTE com os valores corretos
+        track("InitiateCheckout", {value: 14.90, currency: "BRL"}, {value: 14.90});
+        
+        // Delay seguro para garantir que a requisição de rastreamento saia antes do redirecionamento
+        setTimeout(function(){ window.location.href = dest; }, 400);
+      }, true);
     });
   }
 
-  window.addEventListener("load", function(){
-    track("ViewContent",{content_name:"Histórias Proibidas",value:14.90,currency:"BRL"},{value:14.90});
+  // Executa assim que o HTML estiver pronto para interação
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function(){
+      track("ViewContent", {content_name: "Histórias Proibidas", value: 14.90, currency: "BRL"}, {value: 14.90});
+      wireButtons();
+    });
+  } else {
+    track("ViewContent", {content_name: "Histórias Proibidas", value: 14.90, currency: "BRL"}, {value: 14.90});
     wireButtons();
-  });
+  }
 })();
 </script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=834191219576803&ev=PageView&noscript=1"/></noscript>
